@@ -1,0 +1,17 @@
+RewriteEngine On
+
+RewriteCond %{THE_REQUEST} ^GET\ /route\.php?([^=]+)=(\S+) [NC]
+RewriteRule ^route\.php$ /%1/%2? [R=301,L,NC]
+
+# Now, deal with internal rewrites (which will not cause redirection):
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/]+)/([^/]+)/?$ /route.php?$1=$2 [NC,L]
+
+# Run Php without filename extension
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# Return 404 if original request is .php
+#RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
+#RewriteRule .* - [L,R=404]
+

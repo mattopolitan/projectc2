@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteCond %{THE_REQUEST} ^GET\ /ucp/profile\.php?([^=]+)=(\S+) [NC]
+RewriteRule ^ucp/profile\.php$ /ucp/%1/%2? [R=301,L,NC]
+
+# Now, deal with internal rewrites (which will not cause redirection):
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ucp/([^/]+)/([^/]+)/?$ /ucp/profile.php?$1=$2 [NC,L]
