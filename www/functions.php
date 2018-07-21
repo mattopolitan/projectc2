@@ -103,13 +103,35 @@
 	        $response = json_decode($response);
 
 	        //Brutal Force 
-	        $paths = computePermutations(range(1,count($path_submit)-1)); //Compute all possible paths, e.g. [1,2,3,...]
+	        $path = range(1,count($path_submit)-1);
+	        // $paths = computePermutations(range(1,count($path_submit)-1)); //Compute all possible paths, e.g. [1,2,3,...]
 
 	        $temp_paths = [];
 	        $shortest_distance = 0;
 	        $shortest_path_no = 0; // key of array $paths
-	        foreach($paths as $path_no => $path){
-	            $temp_paths[$path_no] = [ 'path' => $path , 'total_distance' => 0, 'total_time' => 0];
+	        // foreach($paths as $path_no => $path){
+	        //     $temp_paths[$path_no] = [ 'path' => $path , 'total_distance' => 0, 'total_time' => 0];
+	        //     $last_location = 0; // Start from Origin
+	        //     // Calculate the total distance & total time
+	        //     foreach ($path as $location) {
+	        //         $temp_paths[$path_no]['total_distance'] += $response->rows[$last_location]->elements[$location-1]->distance->value; 
+	        //         $temp_paths[$path_no]['total_time'] += $response->rows[$last_location]->elements[$location-1]->duration->value; 
+	        //         $last_location = $location; 
+	        //     }
+	        //     if($shortest_distance == 0 || $shortest_distance > $temp_paths[$path_no]['total_distance']){
+	        //         $shortest_distance = $temp_paths[$path_no]['total_distance'];
+	        //         $shortest_path_no = $path_no;
+	        //     }
+	        // }
+
+	        //Genetic Algorithm
+	        for ($path_no = 0; $path_no < 500; $path_no ++){
+	        	// $path_father = shuffle(range(1,count($path_submit)-1));
+	        	// $path_mother = shuffle(range(1,count($path_submit)-1));
+	        	shuffle($path);
+	        	echo json_encode($path)."\n";
+
+	        	$temp_paths[$path_no] = [ 'path' => $path , 'total_distance' => 0, 'total_time' => 0];
 	            $last_location = 0; // Start from Origin
 	            // Calculate the total distance & total time
 	            foreach ($path as $location) {
@@ -121,7 +143,9 @@
 	                $shortest_distance = $temp_paths[$path_no]['total_distance'];
 	                $shortest_path_no = $path_no;
 	            }
+	            echo $shortest_distance."\n";
 	        }
+	        
 
 	        $estimated_time = $temp_paths[$shortest_path_no]['total_time'];
 	        $shortest_path = $temp_paths[$shortest_path_no]; // e.g. [ 'path' => [0,1,2,3] , 'total_distance' => 18000, 'total_time' => 2000]
